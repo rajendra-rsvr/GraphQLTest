@@ -15,9 +15,10 @@ namespace GraphQLTest.IServices
             _IDataAccessProvider = IDataAccessProvider;
         }
 
+
+        // Adds a new user based on the provided information.
         public User AddUser(NewUser input)
         {
-
             User user = new User();
             user.FirstName = input.FirstName;
             user.LastName = input.LastName;
@@ -25,6 +26,7 @@ namespace GraphQLTest.IServices
             return _IDataAccessProvider.AddUser(user);
         }
 
+        // Updates a user with the specified ID and optional new information.
         public User UpdateUser(int id, string? firstName, string? lastName, string? email, string? address)
         {
             User users = new User();
@@ -60,6 +62,8 @@ namespace GraphQLTest.IServices
             return _IDataAccessProvider.UpdateUser(user);
         }
 
+
+        // Deletes a user with the specified ID from the system.
         public bool DeleteUser(int id)
         {
             return _IDataAccessProvider.DeleteUser(id);

@@ -14,6 +14,7 @@ namespace GraphQLTest.IServices
             _IDataAccessProvider = IDataAccessProvider;
         }
 
+        // Retrieves a list of all users from the system.
         public List<User> GetAllUsers()
         {
             return _IDataAccessProvider.GetAllUsers();

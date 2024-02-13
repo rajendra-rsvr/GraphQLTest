@@ -20,6 +20,8 @@ namespace GraphQLTest.Data
             base.OnModelCreating(builder);
         }
 
+ 
+        // Saves changes made to the database.
         public override int SaveChanges()
         {
             try

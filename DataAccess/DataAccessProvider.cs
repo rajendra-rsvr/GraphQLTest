@@ -13,11 +13,14 @@ namespace GraphQLTest.DataAccess
             _context = context;
         }
 
+        // Retrieves a list of all users from the system.
         public List<User> GetAllUsers()
         {
             var list = _context.Users.ToList();
             return list;
         }
+
+        // Retrieves a user from the system based on the specified ID.
         public User GetUserById(int id)
         {
             return _context.Users.FirstOrDefault(t => t.Id == id);
@@ -29,6 +32,8 @@ namespace GraphQLTest.DataAccess
             return list.AsQueryable();
         }
 
+
+        // Retrieves an IQueryable collection of users from the system.
         public User AddUser(User user)
         {
             try
@@ -47,6 +52,7 @@ namespace GraphQLTest.DataAccess
             }
         }
 
+        // Updates the information of an existing user in the system.
         public User UpdateUser(User user)
         {
             try
@@ -61,6 +67,7 @@ namespace GraphQLTest.DataAccess
             }
         }
 
+        // Deletes a user with the specified ID from the system.
         public bool DeleteUser(int id)
         {
             try
