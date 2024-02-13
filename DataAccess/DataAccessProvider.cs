@@ -1,35 +1,54 @@
 ﻿using GraphQLTest.Data;
 using GraphQLTest.Models;
 using GraphQLTest.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLTest.DataAccess
 {
     public class DataAccessProvider : IDataAccessProvider
     {
-        private readonly AppDbContext _context;
+        //private readonly AppDbContext _context;
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        public DataAccessProvider(AppDbContext context)
+        //public DataAccessProvider(AppDbContext context)
+        //{
+        //    _context = context;
+        //}
+
+        public DataAccessProvider(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
         }
 
         // Retrieves a list of all users from the system.
         public List<User> GetAllUsers()
         {
-            var list = _context.Users.ToList();
-            return list;
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                var list = context.Users.ToList();
+                return list;
+            }
+           
         }
 
         // Retrieves a user from the system based on the specified ID.
         public User GetUserById(int id)
         {
-            return _context.Users.FirstOrDefault(t => t.Id == id);
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                return context.Users.FirstOrDefault(t => t.Id == id);
+            }
+            
         }
 
         public IQueryable<User> GetUsers()
         {
-            var list = _context.Users.ToList();
-            return list.AsQueryable();
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                var list = context.Users.ToList();
+                return list.AsQueryable();
+            }
+           
         }
 
 
@@ -38,13 +57,16 @@ namespace GraphQLTest.DataAccess
         {
             try
             {
-                _context.Users.Add(user);
-                _context.SaveChanges();
+                using (var context = _contextFactory.CreateDbContext())
+                {
+                    context.Users.Add(user);
+                    context.SaveChanges();
 
-                // Get the last inserted user
-                var lastUser = _context.Users.OrderByDescending(u => u.Id).FirstOrDefault();
-
-                return lastUser;
+                    // Get the last inserted user
+                    var lastUser = context.Users.OrderByDescending(u => u.Id).FirstOrDefault();
+                    return lastUser;
+                }
+              
             }
             catch (Exception ex)
             {
@@ -57,9 +79,13 @@ namespace GraphQLTest.DataAccess
         {
             try
             {
-                _context.Users.Update(user);
-                _context.SaveChanges();
-                return _context.Users.FirstOrDefault(t => t.Id == user.Id);
+                using (var context = _contextFactory.CreateDbContext())
+                {
+                    context.Users.Update(user);
+                    context.SaveChanges();
+                    return context.Users.FirstOrDefault(t => t.Id == user.Id);
+                }
+               
             }
             catch (Exception ex)
             {
@@ -72,10 +98,14 @@ namespace GraphQLTest.DataAccess
         {
             try
             {
-                var entity = _context.Users.FirstOrDefault(t => t.Id == id);
-                _context.Users.Remove(entity);
-                _context.SaveChanges();
-                return true;
+                using (var context = _contextFactory.CreateDbContext())
+                {
+                    var entity = context.Users.FirstOrDefault(t => t.Id == id);
+                    context.Users.Remove(entity);
+                    context.SaveChanges();
+                    return true;
+
+                }
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@ namespace GraphQLTest.DataAccess
     // Represents a data access provider interface for managing User entities.
     public interface IDataAccessProvider
     {
+
         // Retrieves a list of all users from the system.
         List<User> GetAllUsers();
 

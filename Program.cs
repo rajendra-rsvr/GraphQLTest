@@ -2,6 +2,7 @@ using GraphQLTest.Data;
 using GraphQLTest.DataAccess;
 using GraphQLTest.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,10 +29,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     // Configuring the DbContext to use Npgsql (PostgreSQL) with the provided connection string.
     options.UseNpgsql(sqlConnectionString);
-}, ServiceLifetime.Singleton);
+}, ServiceLifetime.Scoped);
+
 
 // Adding a transient registration for IDataAccessProvider and its implementation DataAccessProvider to the dependency injection container.
-builder.Services.AddTransient<IDataAccessProvider, DataAccessProvider>();
+builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
 
 // Adding a GraphQL server to the dependency injection container.
 builder.Services.AddGraphQLServer().AddQueryType<GraphQLTest.IServices.Query>()
