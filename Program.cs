@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var sqlConnectionString =  builder.Configuration["ConnectionString"];
+var ConnectionString =  builder.Configuration["ConnectionString"];
 
 // Configuring CORS (Cross-Origin Resource Sharing) for the application.
 builder.Services.AddCors(options =>
@@ -25,11 +25,12 @@ builder.Services.AddCors(options =>
 
 
 // Adding a DbContext to the dependency injection container.
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
     // Configuring the DbContext to use Npgsql (PostgreSQL) with the provided connection string.
-    options.UseNpgsql(sqlConnectionString);
+    options.UseNpgsql(ConnectionString);
 }, ServiceLifetime.Scoped);
+
 
 
 // Adding a transient registration for IDataAccessProvider and its implementation DataAccessProvider to the dependency injection container.

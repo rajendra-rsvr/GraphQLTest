@@ -2,31 +2,55 @@
 using GraphQLTest.Models;
 using GraphQLTest.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace GraphQLTest.DataAccess
 {
     public class DataAccessProvider : IDataAccessProvider
     {
         //private readonly AppDbContext _context;
-        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        //private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        //public DataAccessProvider(AppDbContext context)
+        //public DataAccessProvider(IDbContextFactory<AppDbContext> contextFactory)
         //{
-        //    _context = context;
+        //    _contextFactory = contextFactory;
         //}
 
-        public DataAccessProvider(IDbContextFactory<AppDbContext> contextFactory)
+        private readonly IServiceScopeFactory _contextFactory;
+
+        public DataAccessProvider(IServiceScopeFactory serviceScopeFactory)
         {
-            _contextFactory = contextFactory;
+            _contextFactory = serviceScopeFactory;
         }
 
         // Retrieves a list of all users from the system.
         public List<User> GetAllUsers()
         {
-            using (var context = _contextFactory.CreateDbContext())
+            try
             {
-                var list = context.Users.ToList();
-                return list;
+                using(var scope = _contextFactory.CreateScope())
+        {
+                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+
+                    using (var context = contextFactory.CreateDbContext())
+                    {
+                        var list = context.Users.ToList();
+                        return list;
+                    }
+                }
+                //using (var context = _contextFactory.CreateDbContext())
+                //{
+                //    var list = context.Users.ToList();
+                //    return list;
+                //}
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
            
         }
@@ -34,21 +58,39 @@ namespace GraphQLTest.DataAccess
         // Retrieves a user from the system based on the specified ID.
         public User GetUserById(int id)
         {
-            using (var context = _contextFactory.CreateDbContext())
+            try
             {
-                return context.Users.FirstOrDefault(t => t.Id == id);
+                using (var scope = _contextFactory.CreateScope())
+                {
+                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+
+                    using (var context = contextFactory.CreateDbContext())
+                    {
+                        return context.Users.FirstOrDefault(t => t.Id == id);
+                    }
+                }
             }
-            
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+         
         }
 
         public IQueryable<User> GetUsers()
         {
-            using (var context = _contextFactory.CreateDbContext())
+
+            using (var scope = _contextFactory.CreateScope())
             {
-                var list = context.Users.ToList();
-                return list.AsQueryable();
+                var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+
+                using (var context = contextFactory.CreateDbContext())
+                {
+                    var list = context.Users.ToList();
+                    return list.AsQueryable();
+                }
             }
-           
         }
 
 
@@ -57,16 +99,20 @@ namespace GraphQLTest.DataAccess
         {
             try
             {
-                using (var context = _contextFactory.CreateDbContext())
+                using (var scope = _contextFactory.CreateScope())
                 {
-                    context.Users.Add(user);
-                    context.SaveChanges();
+                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
 
-                    // Get the last inserted user
-                    var lastUser = context.Users.OrderByDescending(u => u.Id).FirstOrDefault();
-                    return lastUser;
+                    using (var context = contextFactory.CreateDbContext())
+                    {
+                        context.Users.Add(user);
+                        context.SaveChanges();
+
+                        // Get the last inserted user
+                        var lastUser = context.Users.OrderByDescending(u => u.Id).FirstOrDefault();
+                        return lastUser;
+                    }
                 }
-              
             }
             catch (Exception ex)
             {
@@ -79,13 +125,17 @@ namespace GraphQLTest.DataAccess
         {
             try
             {
-                using (var context = _contextFactory.CreateDbContext())
+                using (var scope = _contextFactory.CreateScope())
                 {
-                    context.Users.Update(user);
-                    context.SaveChanges();
-                    return context.Users.FirstOrDefault(t => t.Id == user.Id);
+                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+
+                    using (var context = contextFactory.CreateDbContext())
+                    {
+                        context.Users.Update(user);
+                        context.SaveChanges();
+                        return context.Users.FirstOrDefault(t => t.Id == user.Id);
+                    }
                 }
-               
             }
             catch (Exception ex)
             {
@@ -98,13 +148,17 @@ namespace GraphQLTest.DataAccess
         {
             try
             {
-                using (var context = _contextFactory.CreateDbContext())
+                using (var scope = _contextFactory.CreateScope())
                 {
-                    var entity = context.Users.FirstOrDefault(t => t.Id == id);
-                    context.Users.Remove(entity);
-                    context.SaveChanges();
-                    return true;
+                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
 
+                    using (var context = contextFactory.CreateDbContext())
+                    {
+                        var entity = context.Users.FirstOrDefault(t => t.Id == id);
+                        context.Users.Remove(entity);
+                        context.SaveChanges();
+                        return true;
+                    }
                 }
             }
             catch (Exception ex)

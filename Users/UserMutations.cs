@@ -11,8 +11,7 @@ namespace GraphQLTest.Users
         {
             _IDataAccessProvider = IDataAccessProvider;
         }
-        public async Task<AddUserPayload> AddUser(
-         AddUserInput input)
+        public async Task<AddUserPayload> AddUser(AddUserInput input)
         {
             var user = new User
             {
@@ -28,9 +27,7 @@ namespace GraphQLTest.Users
             return new AddUserPayload(user);
         }
 
-        public async Task<UpdateUserPayload> UpdateUser(
-       int id,
-       UpdateUserInput input)
+        public async Task<UpdateUserPayload> UpdateUser(int id, UpdateUserInput input)
         {
             var existingUser = _IDataAccessProvider.GetUserById(id);
 
