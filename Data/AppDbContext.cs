@@ -1,6 +1,8 @@
-﻿using GraphQLTest.Models;
+﻿using GraphQLTest.CoreLayer.Entities;
+using GraphQLTest.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace GraphQLTest.Data
 {
@@ -14,6 +16,9 @@ namespace GraphQLTest.Data
         }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Post> Posts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
