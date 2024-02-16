@@ -153,5 +153,33 @@ namespace GraphQLTest.DataAccess
                 return false;
             }
         }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    using (var scope = _contextFactory.CreateScope())
+                    {
+                        var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+
+                        using (var context = contextFactory.CreateDbContext())
+                        {
+                            context.Dispose();
+                        }
+                    }
+                   
+                }
+            }
+            this.disposed = true;
+        }
+
     }
 }
