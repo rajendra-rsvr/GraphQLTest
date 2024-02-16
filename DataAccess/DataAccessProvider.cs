@@ -11,14 +11,6 @@ namespace GraphQLTest.DataAccess
 {
     public class DataAccessProvider : IDataAccessProvider
     {
-        //private readonly AppDbContext _context;
-        //private readonly IDbContextFactory<AppDbContext> _contextFactory;
-
-        //public DataAccessProvider(IDbContextFactory<AppDbContext> contextFactory)
-        //{
-        //    _contextFactory = contextFactory;
-        //}
-
         private readonly IServiceScopeFactory _contextFactory;
 
         public DataAccessProvider(IServiceScopeFactory serviceScopeFactory)
@@ -41,11 +33,6 @@ namespace GraphQLTest.DataAccess
                         return list;
                     }
                 }
-                //using (var context = _contextFactory.CreateDbContext())
-                //{
-                //    var list = context.Users.ToList();
-                //    return list;
-                //}
             }
             catch (Exception ex)
             {

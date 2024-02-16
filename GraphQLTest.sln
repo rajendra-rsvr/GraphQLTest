@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQLTest", "GraphQLTest.csproj", "{F59CCE28-AEB0-4D58-9B8D-66EB9F49A2DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGraphQL.NTest", "..\TestGraphQL.NTest\TestGraphQL.NTest.csproj", "{E009205D-C05C-4A31-AAA7-F9F366F186A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProjectUnit1", "..\TestProjectUnit1\TestProjectUnit1.csproj", "{A5EA7385-2BCD-4343-886A-F88AFC73660A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{F59CCE28-AEB0-4D58-9B8D-66EB9F49A2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F59CCE28-AEB0-4D58-9B8D-66EB9F49A2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F59CCE28-AEB0-4D58-9B8D-66EB9F49A2DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E009205D-C05C-4A31-AAA7-F9F366F186A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E009205D-C05C-4A31-AAA7-F9F366F186A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E009205D-C05C-4A31-AAA7-F9F366F186A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E009205D-C05C-4A31-AAA7-F9F366F186A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5EA7385-2BCD-4343-886A-F88AFC73660A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5EA7385-2BCD-4343-886A-F88AFC73660A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5EA7385-2BCD-4343-886A-F88AFC73660A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5EA7385-2BCD-4343-886A-F88AFC73660A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
