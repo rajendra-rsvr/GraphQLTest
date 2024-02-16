@@ -1,13 +1,10 @@
 ﻿using GraphQLTest.Data;
 using GraphQLTest.Models;
 using GraphQLTest.Users;
-using HotChocolate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace GraphQLTest.DataAccess
@@ -34,8 +31,8 @@ namespace GraphQLTest.DataAccess
         {
             try
             {
-                using (var scope = _contextFactory.CreateScope())
-                {
+                using(var scope = _contextFactory.CreateScope())
+        {
                     var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
 
                     using (var context = contextFactory.CreateDbContext())
@@ -44,13 +41,18 @@ namespace GraphQLTest.DataAccess
                         return list;
                     }
                 }
+                //using (var context = _contextFactory.CreateDbContext())
+                //{
+                //    var list = context.Users.ToList();
+                //    return list;
+                //}
             }
             catch (Exception ex)
             {
 
                 throw;
             }
-
+           
         }
 
         // Retrieves a user from the system based on the specified ID.
@@ -73,7 +75,7 @@ namespace GraphQLTest.DataAccess
 
                 throw;
             }
-
+         
         }
 
         public IQueryable<User> GetUsers()
@@ -163,36 +165,6 @@ namespace GraphQLTest.DataAccess
             {
                 return false;
             }
-        }
-
-        List<User> IDataAccessProvider.GetAllUsers()
-        {
-            throw new NotImplementedException();
-        }
-
-        IQueryable<User> IDataAccessProvider.GetUsers()
-        {
-            throw new NotImplementedException();
-        }
-
-        User IDataAccessProvider.GetUserById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        User IDataAccessProvider.AddUser(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        User IDataAccessProvider.UpdateUser(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IDataAccessProvider.DeleteUser(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

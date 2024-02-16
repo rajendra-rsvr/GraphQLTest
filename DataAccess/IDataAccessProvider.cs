@@ -1,6 +1,4 @@
 ﻿using GraphQLTest.Models;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GraphQLTest.DataAccess
 {
