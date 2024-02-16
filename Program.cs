@@ -27,19 +27,18 @@ builder.Services.AddCors(options =>
 // Adding a DbContext to the dependency injection container.
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
-    // Configuring the DbContext to use Npgsql (PostgreSQL) with the provided connection string.
     options.UseNpgsql(ConnectionString);
-}, ServiceLifetime.Scoped);
-
-
+}, ServiceLifetime.Singleton);
 
 // Adding a transient registration for IDataAccessProvider and its implementation DataAccessProvider to the dependency injection container.
 builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
 
-// Adding a GraphQL server to the dependency injection container.
-builder.Services.AddGraphQLServer().AddQueryType<GraphQLTest.IServices.Query>()
-    .AddMutationType<UserMutations>(); builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
 
+// Adding a GraphQL server to the dependency injection container.
+builder.Services.AddGraphQLServer()
+    .AddQueryType<GraphQLTest.IServices.Query>()
+    .AddMutationType<UserMutations>();
+builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
 
 var app = builder.Build();
 app.UseRouting();
