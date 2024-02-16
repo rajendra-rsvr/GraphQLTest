@@ -15,6 +15,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+    <PackageReference Include="Testcontainers" Version="3.7.0" />
+    <PackageReference Include="TestContainers.Container.Abstractions" Version="1.5.4" />
+    <PackageReference Include="TestContainers.Container.Database" Version="1.5.4" />
+    <PackageReference Include="TestContainers.Container.Database.PostgreSql" Version="1.5.4" />
+    <PackageReference Include="Testcontainers.PostgreSql" Version="3.7.0" />
   </ItemGroup>
 
 </Project>

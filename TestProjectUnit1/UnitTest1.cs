@@ -14,15 +14,7 @@ namespace TestProjectUnit1
         [Fact]
         public void TestDbContextScoping()
         {
-            // Arrange
-            //var serviceCollection = new ServiceCollection();
-            //serviceCollection.AddDbContext<AppDbContext>(options =>
-            //{
-            //    options.UseInMemoryDatabase("TestDatabase");
-            //});
-
             var connectionString = "Host=localhost;Database=MYN_Test_DB;Username=postgres;Password=Server.123;Port=5432";
-
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddDbContextFactory<AppDbContext>(options =>
             {
@@ -33,7 +25,6 @@ namespace TestProjectUnit1
 
             using (var serviceProvider = serviceCollection.BuildServiceProvider())
             {
-                // Act
                 using (var scope = serviceProvider.CreateScope())
                 {
                     var dataAccessProvider = scope.ServiceProvider.GetRequiredService<IDataAccessProvider>();
