@@ -1,103 +1,73 @@
 ﻿using GraphQLTest.Data;
 using GraphQLTest.Models;
-using GraphQLTest.Users;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using static System.Formats.Asn1.AsnWriter;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GraphQLTest.DataAccess
 {
     public class DataAccessProvider : IDataAccessProvider
     {
-        private readonly IServiceScopeFactory _contextFactory;
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        public DataAccessProvider(IServiceScopeFactory serviceScopeFactory)
+        public DataAccessProvider(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _contextFactory = serviceScopeFactory;
+            _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         }
 
-        // Retrieves a list of all users from the system.
         public List<User> GetAllUsers()
         {
             try
             {
-                using(var scope = _contextFactory.CreateScope())
-        {
-                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
-
-                    using (var context = contextFactory.CreateDbContext())
-                    {
-                        var list = context.Users.ToList();
-                        return list;
-                    }
+                using (var context = _contextFactory.CreateDbContext())
+                {
+                    var list = context.Users.ToList();
+                    return list;
                 }
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-           
         }
 
-        // Retrieves a user from the system based on the specified ID.
         public User GetUserById(int id)
         {
             try
             {
-                using (var scope = _contextFactory.CreateScope())
+                using (var context = _contextFactory.CreateDbContext())
                 {
-                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
-
-                    using (var context = contextFactory.CreateDbContext())
-                    {
-                        return context.Users.FirstOrDefault(t => t.Id == id);
-                    }
+                    return context.Users.FirstOrDefault(t => t.Id == id);
                 }
             }
             catch (Exception)
             {
                 throw;
             }
-         
         }
 
         public IQueryable<User> GetUsers()
         {
-
-            using (var scope = _contextFactory.CreateScope())
+            using (var context = _contextFactory.CreateDbContext())
             {
-                var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
-
-                using (var context = contextFactory.CreateDbContext())
-                {
-                    var list = context.Users.ToList();
-                    return list.AsQueryable();
-                }
+                var list = context.Users.ToList();
+                return list.AsQueryable();
             }
         }
 
-
-        // Retrieves an IQueryable collection of users from the system.
         public User AddUser(User user)
         {
             try
             {
-                using (var scope = _contextFactory.CreateScope())
+                using (var context = _contextFactory.CreateDbContext())
                 {
-                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+                    context.Users.Add(user);
+                    context.SaveChanges();
 
-                    using (var context = contextFactory.CreateDbContext())
-                    {
-                        context.Users.Add(user);
-                        context.SaveChanges();
-
-                        // Get the last inserted user
-                        var lastUser = context.Users.OrderByDescending(u => u.Id).FirstOrDefault();
-                        return lastUser;
-                    }
+                    var lastUser = context.Users.OrderByDescending(u => u.Id).FirstOrDefault();
+                    return lastUser;
                 }
             }
             catch (Exception ex)
@@ -106,21 +76,15 @@ namespace GraphQLTest.DataAccess
             }
         }
 
-        // Updates the information of an existing user in the system.
         public User UpdateUser(User user)
         {
             try
             {
-                using (var scope = _contextFactory.CreateScope())
+                using (var context = _contextFactory.CreateDbContext())
                 {
-                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
-
-                    using (var context = contextFactory.CreateDbContext())
-                    {
-                        context.Users.Update(user);
-                        context.SaveChanges();
-                        return context.Users.FirstOrDefault(t => t.Id == user.Id);
-                    }
+                    context.Users.Update(user);
+                    context.SaveChanges();
+                    return context.Users.FirstOrDefault(t => t.Id == user.Id);
                 }
             }
             catch (Exception ex)
@@ -129,22 +93,20 @@ namespace GraphQLTest.DataAccess
             }
         }
 
-        // Deletes a user with the specified ID from the system.
         public bool DeleteUser(int id)
         {
             try
             {
-                using (var scope = _contextFactory.CreateScope())
+                using (var context = _contextFactory.CreateDbContext())
                 {
-                    var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
-
-                    using (var context = contextFactory.CreateDbContext())
+                    var entity = context.Users.FirstOrDefault(t => t.Id == id);
+                    if (entity != null)
                     {
-                        var entity = context.Users.FirstOrDefault(t => t.Id == id);
                         context.Users.Remove(entity);
                         context.SaveChanges();
                         return true;
                     }
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -155,15 +117,7 @@ namespace GraphQLTest.DataAccess
 
         public void Dispose()
         {
-            using (var scope = _contextFactory.CreateScope())
-            {
-                var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
-
-                using (var context = contextFactory.CreateDbContext())
-                {
-                    context.Dispose();
-                }
-            }
+            // No need to manually dispose, as the scoped DbContext will be handled by the DI container.
         }
     }
 }

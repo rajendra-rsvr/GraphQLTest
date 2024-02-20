@@ -1,29 +1,45 @@
-﻿using GraphQLTest.Data;
+﻿using GraphQLTest.Models;
 using GraphQLTest.DataAccess;
-using GraphQLTest.Models;
-using System.Diagnostics.Metrics;
-using System.Net;
+using System.Collections.Generic;
 
 namespace GraphQLTest.IServices
 {
     public class Query
     {
-        private readonly IDataAccessProvider _IDataAccessProvider;
-        public Query(IDataAccessProvider IDataAccessProvider)
+        private readonly IDataAccessProvider _dataAccessProvider;
+
+        public Query(IDataAccessProvider dataAccessProvider)
         {
-            _IDataAccessProvider = IDataAccessProvider;
+            _dataAccessProvider = dataAccessProvider;
         }
+
 
         // Retrieves a list of all users from the system.
         public List<User> GetAllUsers()
         {
-            return _IDataAccessProvider.GetAllUsers();
+            try
+            {
+                return _dataAccessProvider.GetAllUsers();
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception appropriately
+                throw;
+            }
         }
 
-        public User GetUserById([ID]int id)
+        // Retrieves a user from the system based on the specified ID.
+        public User GetUserById(int id)
         {
-            return _IDataAccessProvider.GetUserById(id);
+            try
+            {
+                return _dataAccessProvider.GetUserById(id);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception appropriately
+                throw;
+            }
         }
-
     }
 }

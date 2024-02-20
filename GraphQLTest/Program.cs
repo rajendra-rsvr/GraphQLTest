@@ -31,7 +31,7 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
 }, ServiceLifetime.Singleton);
 
 // Adding a transient registration for IDataAccessProvider and its implementation DataAccessProvider to the dependency injection container.
-builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
+//builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
 
 
 // Adding a GraphQL server to the dependency injection container.
