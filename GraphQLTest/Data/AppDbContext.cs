@@ -15,25 +15,9 @@ namespace GraphQLTest.Data
 
         public DbSet<User> Users { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
-        }
-
- 
-        // Saves changes made to the database.
-        public override int SaveChanges()
-        {
-            try
-            {
-                ChangeTracker.DetectChanges();
-                return base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-
-                throw ;
-            }
+            // Configure your entities
         }
     }
 }

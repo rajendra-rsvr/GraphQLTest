@@ -3,9 +3,8 @@
 namespace GraphQLTest.DataAccess
 {
     // Represents a data access provider interface for managing User entities.
-    public interface IDataAccessProvider : IDisposable
+    public interface IDataAccessProvider  
     {
-
         // Retrieves a list of all users from the system.
         List<User> GetAllUsers();
 
@@ -23,6 +22,5 @@ namespace GraphQLTest.DataAccess
 
         // Deletes a user with the specified ID from the system.
         bool DeleteUser(int id);
-
     }
 }
