@@ -1,11 +1,11 @@
 using GraphQLTest.Data;
 using GraphQLTest.DataAccess;
+using GraphQLTest.IServices;
 using GraphQLTest.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var ConnectionString =  builder.Configuration["ConnectionString"];
 
 // Configuring CORS (Cross-Origin Resource Sharing) for the application.
@@ -23,22 +23,21 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 // Adding a DbContext to the dependency injection container.
-builder.Services.AddDbContextFactory<AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(ConnectionString);
-}, ServiceLifetime.Singleton);
+});
 
-// Adding a transient registration for IDataAccessProvider and its implementation DataAccessProvider to the dependency injection container.
+builder.Services.AddScoped<Query, Query>();
+builder.Services.AddScoped<UserMutations, UserMutations>();
 builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
-
 
 // Adding a GraphQL server to the dependency injection container.
 builder.Services.AddGraphQLServer()
-    .AddQueryType<GraphQLTest.IServices.Query>()
+    .AddQueryType<Query>()
     .AddMutationType<UserMutations>();
-builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
+
 
 var app = builder.Build();
 app.UseRouting();
@@ -51,7 +50,6 @@ app.UseEndpoints(endpoints =>
 });
 
 app.MapGet("/", () => "GraphQL");
-//app.MapGraphQL();
 
 // Running the application.
 app.Run();
